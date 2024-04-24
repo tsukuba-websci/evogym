@@ -1,3 +1,35 @@
+[tool.poetry]
+name = "evogym"
+version = "1.0.0"
+description = "Evolution Gym: A benchmark for developing and comparing soft robot co-design algorithms."
+authors = ["Jagdeep Bhatia <jagdeep@mit.edu>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "3.8.18"
+glfw = "^2.5.0"
+gym = "^0.22.0"
+h5py = "^3.6.0"
+imageio = "^2.14.1"
+matplotlib = "^3.5.1"
+numpy = "~1.23.0"
+opencv-python = "^4.5.5.62"
+pillow = "^9.0.0"
+pybind11 = "^2.9.0"
+pygifsicle = "^1.0.5"
+pyopengl = "^3.1.5"
+torch = "^1.10.2"
+ttkbootstrap = "^1.5.1"
+neat-python = "^0.92"
+stable-baselines3 = "^2.3.1"
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.4.0"
+flake8 = "^7.0.0"
+mypy = "^1.9.0"
+ruff = "^0.4.1"
+
 [build-system]
-requires = ["setuptools", "wheel", "pybind11>=2.6.0"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

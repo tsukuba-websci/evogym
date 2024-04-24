@@ -1,6 +1,5 @@
 from unittest import TestCase
 
-import evogym.envs
 import gym
 from evogym import sample_robot
 
