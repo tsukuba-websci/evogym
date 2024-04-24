@@ -12,7 +12,7 @@ if __name__ == '__main__':
     while True:
         action = env.action_space.sample()-1
         ob, reward, done, info = env.step(action)
-        env.render()
+        # env.render()
 
         if done:
             env.reset()
