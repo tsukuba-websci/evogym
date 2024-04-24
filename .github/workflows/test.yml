@@ -17,30 +17,36 @@ jobs:
           - "ubuntu-22.04"
           - "ubuntu-latest"
         python:
-          - "3.7"
           - "3.8"
-          - "3.9"
-    runs-on: ubuntu-22.04
+
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Repository
+        uses: actions/checkout@v4
         with:
           submodules: true
-      - name: Set up Python ${{ matrix.python }}
+
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python }}
-      - name: Update deb repository
-        run: sudo apt-get update
-      - name: Install deb dependencies
-        run: sudo apt-get install -y xorg-dev libglu1-mesa-dev libglew-dev xvfb
-      - name: Install python dependencies
-        run: pip install -r requirements.txt
-      - name: Cache python wheel packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: wheel-cache-${{ hashFiles('requirements.txt') }}
-      - name: Install evolution gym
-        run: pip install -e .
+          python-version-file: .python-version
+
+      - name: Install Poetry
+        run: |
+          pipx install poetry==1.8.2
+
+      - name: Install Dependencies
+        run: |
+          sudo rm -f /etc/apt/sources.list.d/archive_uri-*
+          sudo apt-get update
+          sudo apt-get install -y xorg-dev libglu1-mesa-dev xvfb
+
+      - name: Build evogym
+        run: |
+          echo "Python Version: $(python --version)"
+          echo "Poesy Version: $(poetry --version)"
+          poetry install --no-root
+          poetry build && poetry run python setup.py install
+
       - name: Run test
         run: xvfb-run python -m unittest tests/test_render.py

@@ -35,14 +35,18 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          sudo rm -f /etc/apt/sources.list.d/archive_uri-*
           sudo apt-get update
           sudo apt-get install -y xorg-dev libglu1-mesa-dev
 
-      - name: Build evogym and Run Example
+      - name: Build evogym
         run: |
           echo "Python Version: $(python --version)"
           echo "Poesy Version: $(poetry --version)"
           poetry install --no-root
           poetry build && poetry run python setup.py install
+
+      - name: Run Example
+        run: |
           cd examples
           poetry run python gym_test_without_render.py
