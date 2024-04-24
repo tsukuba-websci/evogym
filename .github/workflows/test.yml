@@ -1,23 +1,21 @@
 name: Testing
 
-on: [push, pull_request]
-
-permissions:
-  contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
+    name: Test / Unit Test
     strategy:
       matrix:
         os:
           - "ubuntu-22.04"
           - "ubuntu-latest"
-        python:
-          - "3.8"
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -49,4 +47,4 @@ jobs:
           poetry build && poetry run python setup.py install
 
       - name: Run test
-        run: xvfb-run python -m unittest tests/test_render.py
+        run: xvfb-run poetry run python -m unittest tests/test_render.py
