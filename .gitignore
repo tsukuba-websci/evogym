@@ -11,6 +11,7 @@ old/
 *.sln
 *.egg-info
 dist/
+venv/
 build/
 __pycache__/
 examples/saved_data
