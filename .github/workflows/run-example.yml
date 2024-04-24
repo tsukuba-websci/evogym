@@ -1,0 +1,55 @@
+name: Run Example
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+
+jobs:
+  run-example:
+    name: Test / Run Example
+    strategy:
+      matrix:
+        os:
+          - "ubuntu-22.04"
+          - "ubuntu-latest"
+        python:
+          - "3.8"
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Python ${{ matrix.python }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install Poetry
+        run: |
+          pipx install poetry==1.8.2
+
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xorg-dev libglu1-mesa-dev libglew-dev xvfb
+
+      - name: Install Python Dependencies and Build Evolution Gym
+        run: |
+          poetry env use ${{ matrix.python }}
+          poetry install --no-root
+          poetry build
+
+      - name: Run Example
+        run: |
+          cd examples
+          python gym_test.py
+
+
